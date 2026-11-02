@@ -10,29 +10,30 @@ import sys
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
-        employee_id = int(sys.argv[1])
-        
+        emp_id = int(sys.argv[1])
         base_url = "https://jsonplaceholder.typicode.com/"
-        
-        user_response = requests.get("{}users/{}".format(base_url, employee_id))
+
+        user_url = "{}users/{}".format(base_url, emp_id)
+        user_response = requests.get(user_url)
         user_data = user_response.json()
-        employee_name = user_data.get("name")
-        
+        emp_name = user_data.get("name")
+
+        todos_url = "{}todos".format(base_url)
         todos_response = requests.get(
-            "{}todos".format(base_url),
-            params={"userId": employee_id}
+            todos_url,
+            params={"userId": emp_id}
         )
         todos_data = todos_response.json()
-        
+
         total_tasks = len(todos_data)
-        done_tasks = [task for task in todos_data if task.get("completed")]
-        number_of_done_tasks = len(done_tasks)
-        
+        done_tasks = [t for t in todos_data if t.get("completed")]
+        num_done = len(done_tasks)
+
         print(
             "Employee {} is done with tasks({}/{}):".format(
-                employee_name, number_of_done_tasks, total_tasks
+                emp_name, num_done, total_tasks
             )
         )
-        
+
         for task in done_tasks:
             print("\t {}".format(task.get("title")))
