@@ -11,31 +11,33 @@ import sys
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
-        employee_id = int(sys.argv[1])
+        emp_id = int(sys.argv[1])
         base_url = "https://jsonplaceholder.typicode.com/"
 
         # Fetch user details
-        user_response = requests.get("{}users/{}".format(base_url, employee_id))
+        user_url = "{}users/{}".format(base_url, emp_id)
+        user_response = requests.get(user_url)
         user_data = user_response.json()
-        employee_username = user_data.get("username")
+        emp_username = user_data.get("username")
 
         # Fetch all todos for the employee
+        todos_url = "{}todos".format(base_url)
         todos_response = requests.get(
-            "{}todos".format(base_url),
-            params={"userId": employee_id}
+            todos_url,
+            params={"userId": emp_id}
         )
         todos_data = todos_response.json()
 
         # Define CSV filename
-        filename = "{}.csv".format(employee_id)
+        filename = "{}.csv".format(emp_id)
 
-        # Write to CSV matching the exact required quoting/formatting
+        # Write to CSV
         with open(filename, mode="w", newline="", encoding="utf-8") as f:
             writer = csv.writer(f, quoting=csv.QUOTE_ALL)
             for task in todos_data:
                 writer.writerow([
-                    employee_id,
-                    employee_username,
+                    emp_id,
+                    emp_username,
                     str(task.get("completed")),
                     task.get("title")
                 ])
