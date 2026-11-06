@@ -7,11 +7,11 @@ using a REST API given an employee ID as a parameter.
 import requests
 import sys
 
+
 if __name__ == '__main__':
     if len(sys.argv) > 1:
         emp_id = sys.argv[1]
         
-        # Fetch user details and todos from JSONPlaceholder API
         user_url = f"https://jsonplaceholder.typicode.com/users/{emp_id}"
         todos_url = f"https://jsonplaceholder.typicode.com/todos?userId={emp_id}"
         
@@ -28,9 +28,7 @@ if __name__ == '__main__':
             done_tasks = [task for task in todos_data if task.get('completed') is True]
             num_done = len(done_tasks)
             
-            # Print the required header format
             print(f"Employee {emp_name} is done with tasks({num_done}/{total_tasks}):")
             
-            # Print each completed task title with 1 tab and 1 space
             for task in done_tasks:
                 print(f"\t {task.get('title')}")
